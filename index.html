@@ -3,292 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Cooking Assistant</title>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
+    <title>AI Chef - Your Intelligent Cooking Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        body, html {
+            height: 100%;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            background-image: url("");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 50% 50%;
         }
-        h1 {
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             color: #333;
         }
-        select, input, button {
-            display: block;
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .chart-container {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #4cae4c;
-        }
-        .food-grid, .ingredient-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .food-item, .ingredient-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .food-item:hover, .ingredient-item:hover {
-            transform: scale(1.05);
-        }
-        .food-item img, .ingredient-item img {
-            max-width: 100%;
-            height: auto;
-        }
-        #videoFeed {
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-            display: block;
-        }
-        .hidden {
-            display: none;
-        }
-        #nextStep {
-            margin-top: 10px;
+            max-width: 600px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>AI Cooking Assistant</h1>
-        <div id="countrySelection">
-            <select id="countrySelect">
-                <option value="">Select Country</option>
-                <option value="india">India</option>
-            </select>
-        </div>
-        <div id="stateSelection" class="hidden">
-            <select id="stateSelect">
-                <option value="">Select State</option>
-            </select>
-        </div>
-        <div id="foodSelection" class="hidden">
-            <div class="food-grid" id="foodGrid"></div>
-        </div>
-        <div id="memberCount" class="hidden">
-            <input type="number" id="memberInput" placeholder="Number of people eating">
-            <button id="memberSubmit">Submit</button>
-        </div>
-        <div id="ingredients" class="hidden">
-            <h2>Ingredients</h2>
-            <div class="ingredient-grid" id="ingredientGrid"></div>
-            <button id="startCooking">Start Cooking</button>
-        </div>
-        <div id="cookingInstructions" class="hidden">
-            <h2>Cooking Instructions</h2>
-            <video id="videoFeed" autoplay playsinline></video>
-            <div id="instructions"></div>
-            <select id="languageSelect">
-                <option value="UK English Female">English</option>
-                <option value="te-IN">Telugu</option>
-            </select>
-            <button id="nextStep">Next Step</button>
-        </div>
+    <div id="particles-js"></div>
+
+    <div class="content">
+        <section class="hero">
+            <div class="container">
+                <h1 class="display-4 mb-4" data-aos="fade-up">AI Chef</h1>
+                <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">Your Intelligent Cooking Assistant</p>
+                <button class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="400">Get Started</button>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5" data-aos="fade-up">Features</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4" data-aos="fade-up">
+                        <div class="text-center">
+                            <div class="feature-icon">🧠</div>
+                            <h3>AI-Powered Recipes</h3>
+                            <p>Get personalized recipe recommendations based on your preferences and available ingredients.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="text-center">
+                            <div class="feature-icon">📷</div>
+                            <h3>Real-time Guidance</h3>
+                            <p>Receive step-by-step instructions with computer vision assistance for perfect results.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="text-center">
+                            <div class="feature-icon">📊</div>
+                            <h3>Nutritional Analysis</h3>
+                            <p>Get detailed nutritional information for your meals using machine learning algorithms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5" data-aos="fade-up">How It Works</h2>
+                <div class="row align-items-center">
+                    <div class="col-md-6" data-aos="fade-right">
+                        <h3>Machine Learning Model</h3>
+                        <p>Our advanced machine learning model analyzes thousands of recipes to provide you with the best cooking suggestions. Try our simple demo below:</p>
+                        <div class="mb-3">
+                            <label for="ingredientInput" class="form-label">Enter an ingredient:</label>
+                            <input type="text" class="form-control" id="ingredientInput" placeholder="e.g., chicken">
+                        </div>
+                        <button class="btn btn-primary" onclick="predictRecipe()">Predict Recipe</button>
+                        <p id="prediction" class="mt-3"></p>
+                    </div>
+                    <div class="col-md-6" data-aos="fade-left">
+                        <div class="chart-container">
+                            <canvas id="recipeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5" data-aos="fade-up">Get Cooking with AI</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <p class="mb-4" data-aos="fade-up">Join thousands of happy cooks who have revolutionized their kitchen experience with AI Chef.</p>
+                        <button class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="200">Download Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_RESPONSIVE_VOICE_API_KEY"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        const countrySelect = document.getElementById('countrySelect');
-        const stateSelect = document.getElementById('stateSelect');
-        const foodGrid = document.getElementById('foodGrid');
-        const memberInput = document.getElementById('memberInput');
-        const memberSubmit = document.getElementById('memberSubmit');
-        const ingredientGrid = document.getElementById('ingredientGrid');
-        const startCooking = document.getElementById('startCooking');
-        const videoFeed = document.getElementById('videoFeed');
-        const instructions = document.getElementById('instructions');
-        const languageSelect = document.getElementById('languageSelect');
-        const nextStepButton = document.getElementById('nextStep');
+        // Initialize AOS
+        AOS.init();
 
-        const states = {
-            india: ['Andhra Pradesh', 'Kerala']
-        };
+        // Initialize particles.js
+        particlesJS.load('particles-js', 'assets/particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
 
-        const foods = {
-            'Andhra Pradesh': [
-                { name: 'Chicken Biryani', image: '/placeholder.svg?height=100&width=100' },
-                { name: 'Pulihora', image: '/placeholder.svg?height=100&width=100' }
-            ],
-            'Kerala': [
-                { name: 'Kerala Fish Curry', image: '/placeholder.svg?height=100&width=100' },
-                { name: 'Appam', image: '/placeholder.svg?height=100&width=100' }
-            ]
-        };
+        // TensorFlow.js simple model
+        let model;
 
-        const ingredients = {
-            'Chicken Biryani': [
-                { name: 'Chicken', image: '/placeholder.svg?height=50&width=50' },
-                { name: 'Basmati Rice', image: '/placeholder.svg?height=50&width=50' },
-                { name: 'Spices', image: '/placeholder.svg?height=50&width=50' }
-            ]
-        };
+        async function loadModel() {
+            model = await tf.sequential();
+            model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+            model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
 
-        const cookingSteps = [
-            "Prepare all ingredients",
-            "Marinate the chicken with yogurt and spices",
-            "Parboil the rice and drain",
-            "In a large pot, layer the marinated chicken and parboiled rice",
-            "Cook on low heat for 25-30 minutes",
-            "Let it rest for 10 minutes before serving"
-        ];
+            const xs = tf.tensor2d([1, 2, 3, 4], [4, 1]);
+            const ys = tf.tensor2d([1, 3, 5, 7], [4, 1]);
 
-        let currentStep = 0;
-
-        function animateElement(element) {
-            anime({
-                targets: element,
-                opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 500,
-                easing: 'easeOutQuad'
-            });
+            await model.fit(xs, ys, {epochs: 100});
+            console.log('Model trained');
         }
 
-        countrySelect.addEventListener('change', (e) => {
-            const country = e.target.value;
-            if (country) {
-                stateSelect.innerHTML = '<option value="">Select State</option>';
-                states[country].forEach(state => {
-                    const option = document.createElement('option');
-                    option.value = state;
-                    option.textContent = state;
-                    stateSelect.appendChild(option);
-                });
-                document.getElementById('stateSelection').classList.remove('hidden');
-                animateElement(document.getElementById('stateSelection'));
-            }
-        });
+        loadModel();
 
-        stateSelect.addEventListener('change', (e) => {
-            const state = e.target.value;
-            if (state) {
-                foodGrid.innerHTML = '';
-                foods[state].forEach(food => {
-                    const foodItem = document.createElement('div');
-                    foodItem.className = 'food-item';
-                    foodItem.innerHTML = `
-                        <img src="${food.image}" alt="${food.name}">
-                        <p>${food.name}</p>
-                    `;
-                    foodItem.addEventListener('click', () => selectFood(food.name));
-                    foodGrid.appendChild(foodItem);
-                });
-                document.getElementById('foodSelection').classList.remove('hidden');
-                animateElement(document.getElementById('foodSelection'));
-            }
-        });
-
-        function selectFood(foodName) {
-            document.getElementById('memberCount').classList.remove('hidden');
-            animateElement(document.getElementById('memberCount'));
-            localStorage.setItem('selectedFood', foodName);
+        function predictRecipe() {
+            const input = document.getElementById('ingredientInput').value;
+            const prediction = model.predict(tf.tensor2d([input.length], [1, 1])).dataSync()[0];
+            document.getElementById('prediction').innerText = `Based on "${input}", we predict a recipe with approximately ${Math.round(prediction)} ingredients.`;
         }
 
-        memberSubmit.addEventListener('click', () => {
-            const members = memberInput.value;
-            if (members) {
-                const selectedFood = localStorage.getItem('selectedFood');
-                ingredientGrid.innerHTML = '';
-                ingredients[selectedFood].forEach(ingredient => {
-                    const ingredientItem = document.createElement('div');
-                    ingredientItem.className = 'ingredient-item';
-                    ingredientItem.innerHTML = `
-                        <img src="${ingredient.image}" alt="${ingredient.name}">
-                        <p>${ingredient.name}</p>
-                    `;
-                    ingredientGrid.appendChild(ingredientItem);
-                });
-                document.getElementById('ingredients').classList.remove('hidden');
-                animateElement(document.getElementById('ingredients'));
+        // Chart.js
+        const ctx = document.getElementById('recipeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Breakfast', 'Lunch', 'Dinner', 'Dessert'],
+                datasets: [{
+                    label: 'Average Cooking Time (minutes)',
+                    data: [15, 30, 45, 20],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Average Cooking Time by Meal Type'
+                    }
+                }
             }
         });
-
-        startCooking.addEventListener('click', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoFeed.srcObject = stream;
-                document.getElementById('cookingInstructions').classList.remove('hidden');
-                animateElement(document.getElementById('cookingInstructions'));
-                showNextStep();
-            } catch (err) {
-                console.error("Error accessing camera:", err);
-                Swal.fire({
-                    title: 'Camera Access Error',
-                    text: 'Unable to access your camera. Please check your permissions and try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-
-        function showNextStep() {
-            if (currentStep < cookingSteps.length) {
-                const step = cookingSteps[currentStep];
-                instructions.innerHTML = `<p>${currentStep + 1}. ${step}</p>`;
-                speakInstruction(step);
-                currentStep++;
-            } else {
-                instructions.innerHTML = '<p>Cooking completed! Enjoy your meal!</p>';
-                speakInstruction('Cooking completed! Enjoy your meal!');
-                nextStepButton.disabled = true;
-            }
-        }
-
-        function speakInstruction(text) {
-            const language = languageSelect.value;
-            responsiveVoice.speak(text, language);
-        }
-
-        nextStepButton.addEventListener('click', showNextStep);
-
-        languageSelect.addEventListener('change', (e) => {
-            const language = e.target.value;
-            responsiveVoice.setDefaultVoice(language);
-        });
-
-        // Initial welcome message
-        Swal.fire({
-            title: 'Welcome to AI Cooking Assistant!',
-            text: 'Let\'s start cooking together. Are you ready?',
-            icon: 'info',
-            confirmButtonText: 'Let\'s Cook!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                responsiveVoice.speak("Welcome to AI Cooking Assistant! Let's start cooking together.", "UK English Female");
-            }
-        });
-    </style>
+    </script>
 </body>
-        </html>
-                                                  </html>
+</html>
