@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cooking Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        select, input, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .food-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .food-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .ingredient-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .ingredient-item img {
+            max-width: 50px;
+            height: auto;
+        }
+        #videoFeed {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Cooking Assistant</h1>
+        <div id="countrySelection">
+            <select id="countrySelect">
+                <option value="">Select Country</option>
+                <option value="india">India</option>
+            </select>
+        </div>
+        <div id="stateSelection" class="hidden">
+            <select id="stateSelect">
+                <option value="">Select State</option>
+            </select>
+        </div>
+        <div id="foodSelection" class="hidden">
+            <div class="food-grid" id="foodGrid"></div>
+        </div>
+        <div id="memberCount" class="hidden">
+            <input type="number" id="memberInput" placeholder="Number of people eating">
+            <button id="memberSubmit">Submit</button>
+        </div>
+        <div id="ingredients" class="hidden">
+            <h2>Ingredients</h2>
+            <div class="ingredient-grid" id="ingredientGrid"></div>
+            <button id="startCooking">Start Cooking</button>
+        </div>
+        <div id="cookingInstructions" class="hidden">
+            <h2>Cooking Instructions</h2>
+            <video id="videoFeed" autoplay playsinline></video>
+            <div id="instructions"></div>
+            <select id="languageSelect">
+                <option value="english">English</option>
+                <option value="telugu">Telugu</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        const countrySelect = document.getElementById('countrySelect');
+        const stateSelect = document.getElementById('stateSelect');
+        const foodGrid = document.getElementById('foodGrid');
+        const memberInput = document.getElementById('memberInput');
+        const memberSubmit = document.getElementById('memberSubmit');
+        const ingredientGrid = document.getElementById('ingredientGrid');
+        const startCooking = document.getElementById('startCooking');
+        const videoFeed = document.getElementById('videoFeed');
+        const instructions = document.getElementById('instructions');
+        const languageSelect = document.getElementById('languageSelect');
+
+        const states = {
+            india: ['Andhra Pradesh', 'Kerala']
+        };
+
+        const foods = {
+            'Andhra Pradesh': [
+                { name: 'Chicken Biryani', image: '/placeholder.svg?height=100&width=100' },
+                { name: 'Pulihora', image: '/placeholder.svg?height=100&width=100' }
+            ],
+            'Kerala': [
+                { name: 'Kerala Fish Curry', image: '/placeholder.svg?height=100&width=100' },
+                { name: 'Appam', image: '/placeholder.svg?height=100&width=100' }
+            ]
+        };
+
+        const ingredients = {
+            'Chicken Biryani': [
+                { name: 'Chicken', image: '/placeholder.svg?height=50&width=50' },
+                { name: 'Basmati Rice', image: '/placeholder.svg?height=50&width=50' },
+                { name: 'Spices', image: '/placeholder.svg?height=50&width=50' }
+            ]
+        };
+
+        countrySelect.addEventListener('change', (e) => {
+            const country = e.target.value;
+            if (country) {
+                stateSelect.innerHTML = '<option value="">Select State</option>';
+                states[country].forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+                document.getElementById('stateSelection').classList.remove('hidden');
+            }
+        });
+
+        stateSelect.addEventListener('change', (e) => {
+            const state = e.target.value;
+            if (state) {
+                foodGrid.innerHTML = '';
+                foods[state].forEach(food => {
+                    const foodItem = document.createElement('div');
+                    foodItem.className = 'food-item';
+                    foodItem.innerHTML = `
+                        <img src="${food.image}" alt="${food.name}">
+                        <p>${food.name}</p>
+                    `;
+                    foodItem.addEventListener('click', () => selectFood(food.name));
+                    foodGrid.appendChild(foodItem);
+                });
+                document.getElementById('foodSelection').classList.remove('hidden');
+            }
+        });
+
+        function selectFood(foodName) {
+            document.getElementById('memberCount').classList.remove('hidden');
+            localStorage.setItem('selectedFood', foodName);
+        }
+
+        memberSubmit.addEventListener('click', () => {
+            const members = memberInput.value;
+            if (members) {
+                const selectedFood = localStorage.getItem('selectedFood');
+                ingredientGrid.innerHTML = '';
+                ingredients[selectedFood].forEach(ingredient => {
+                    const ingredientItem = document.createElement('div');
+                    ingredientItem.className = 'ingredient-item';
+                    ingredientItem.innerHTML = `
+                        <img src="${ingredient.image}" alt="${ingredient.name}">
+                        <p>${ingredient.name}</p>
+                    `;
+                    ingredientGrid.appendChild(ingredientItem);
+                });
+                document.getElementById('ingredients').classList.remove('hidden');
+            }
+        });
+
+        startCooking.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoFeed.srcObject = stream;
+                document.getElementById('cookingInstructions').classList.remove('hidden');
+                showInstructions();
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+            }
+        });
+
+        function showInstructions() {
+            const steps = [
+                "Prepare all ingredients",
+                "Marinate the chicken",
+                "Cook the rice",
+                "Layer the biryani",
+                "Cook on low heat for 20 minutes"
+            ];
+            instructions.innerHTML = steps.map((step, index) => `<p>${index + 1}. ${step}</p>`).join('');
+        }
+
+        languageSelect.addEventListener('change', (e) => {
+            const language = e.target.value;
+            // In a real application, you would translate the instructions here
+            console.log(`Language changed to ${language}`);
+        });
+    </script>
+</body>
+  </html>
