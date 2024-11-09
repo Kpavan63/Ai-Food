@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Cooking Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,48 +38,42 @@
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #4cae4c;
         }
-        .food-grid {
+        .food-grid, .ingredient-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 10px;
             margin-top: 20px;
         }
-        .food-item {
+        .food-item, .ingredient-item {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
-        .food-item img {
+        .food-item:hover, .ingredient-item:hover {
+            transform: scale(1.05);
+        }
+        .food-item img, .ingredient-item img {
             max-width: 100%;
-            height: auto;
-        }
-        .ingredient-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .ingredient-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        .ingredient-item img {
-            max-width: 50px;
             height: auto;
         }
         #videoFeed {
             width: 100%;
             max-width: 400px;
-            margin-top: 20px;
+            margin: 20px auto;
+            display: block;
         }
         .hidden {
             display: none;
+        }
+        #nextStep {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -113,12 +108,16 @@
             <video id="videoFeed" autoplay playsinline></video>
             <div id="instructions"></div>
             <select id="languageSelect">
-                <option value="english">English</option>
-                <option value="telugu">Telugu</option>
+                <option value="UK English Female">English</option>
+                <option value="te-IN">Telugu</option>
             </select>
+            <button id="nextStep">Next Step</button>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_RESPONSIVE_VOICE_API_KEY"></script>
     <script>
         const countrySelect = document.getElementById('countrySelect');
         const stateSelect = document.getElementById('stateSelect');
@@ -130,6 +129,7 @@
         const videoFeed = document.getElementById('videoFeed');
         const instructions = document.getElementById('instructions');
         const languageSelect = document.getElementById('languageSelect');
+        const nextStepButton = document.getElementById('nextStep');
 
         const states = {
             india: ['Andhra Pradesh', 'Kerala']
@@ -154,6 +154,27 @@
             ]
         };
 
+        const cookingSteps = [
+            "Prepare all ingredients",
+            "Marinate the chicken with yogurt and spices",
+            "Parboil the rice and drain",
+            "In a large pot, layer the marinated chicken and parboiled rice",
+            "Cook on low heat for 25-30 minutes",
+            "Let it rest for 10 minutes before serving"
+        ];
+
+        let currentStep = 0;
+
+        function animateElement(element) {
+            anime({
+                targets: element,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            });
+        }
+
         countrySelect.addEventListener('change', (e) => {
             const country = e.target.value;
             if (country) {
@@ -165,6 +186,7 @@
                     stateSelect.appendChild(option);
                 });
                 document.getElementById('stateSelection').classList.remove('hidden');
+                animateElement(document.getElementById('stateSelection'));
             }
         });
 
@@ -183,11 +205,13 @@
                     foodGrid.appendChild(foodItem);
                 });
                 document.getElementById('foodSelection').classList.remove('hidden');
+                animateElement(document.getElementById('foodSelection'));
             }
         });
 
         function selectFood(foodName) {
             document.getElementById('memberCount').classList.remove('hidden');
+            animateElement(document.getElementById('memberCount'));
             localStorage.setItem('selectedFood', foodName);
         }
 
@@ -206,6 +230,7 @@
                     ingredientGrid.appendChild(ingredientItem);
                 });
                 document.getElementById('ingredients').classList.remove('hidden');
+                animateElement(document.getElementById('ingredients'));
             }
         });
 
@@ -214,28 +239,56 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoFeed.srcObject = stream;
                 document.getElementById('cookingInstructions').classList.remove('hidden');
-                showInstructions();
+                animateElement(document.getElementById('cookingInstructions'));
+                showNextStep();
             } catch (err) {
                 console.error("Error accessing camera:", err);
+                Swal.fire({
+                    title: 'Camera Access Error',
+                    text: 'Unable to access your camera. Please check your permissions and try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         });
 
-        function showInstructions() {
-            const steps = [
-                "Prepare all ingredients",
-                "Marinate the chicken",
-                "Cook the rice",
-                "Layer the biryani",
-                "Cook on low heat for 20 minutes"
-            ];
-            instructions.innerHTML = steps.map((step, index) => `<p>${index + 1}. ${step}</p>`).join('');
+        function showNextStep() {
+            if (currentStep < cookingSteps.length) {
+                const step = cookingSteps[currentStep];
+                instructions.innerHTML = `<p>${currentStep + 1}. ${step}</p>`;
+                speakInstruction(step);
+                currentStep++;
+            } else {
+                instructions.innerHTML = '<p>Cooking completed! Enjoy your meal!</p>';
+                speakInstruction('Cooking completed! Enjoy your meal!');
+                nextStepButton.disabled = true;
+            }
         }
+
+        function speakInstruction(text) {
+            const language = languageSelect.value;
+            responsiveVoice.speak(text, language);
+        }
+
+        nextStepButton.addEventListener('click', showNextStep);
 
         languageSelect.addEventListener('change', (e) => {
             const language = e.target.value;
-            // In a real application, you would translate the instructions here
-            console.log(`Language changed to ${language}`);
+            responsiveVoice.setDefaultVoice(language);
         });
-    </script>
+
+        // Initial welcome message
+        Swal.fire({
+            title: 'Welcome to AI Cooking Assistant!',
+            text: 'Let\'s start cooking together. Are you ready?',
+            icon: 'info',
+            confirmButtonText: 'Let\'s Cook!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                responsiveVoice.speak("Welcome to AI Cooking Assistant! Let's start cooking together.", "UK English Female");
+            }
+        });
+    </style>
 </body>
-  </html>
+        </html>
+                                                  </html>
