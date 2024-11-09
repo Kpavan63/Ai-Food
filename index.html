@@ -3,28 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chef - Your Intelligent Cooking Assistant</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>AI Chef - Your Intelligent Cooking Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body, html {
             height: 100%;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow-x: hidden;
         }
         #particles-js {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
-            background-color: #f0f0f0;
-            background-image: url("");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: 50% 50%;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            z-index: -1;
         }
-        .content {
-            position: relative;
-            z-index: 1;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #ff6b6b;
         }
         .hero {
             height: 100vh;
@@ -32,172 +64,269 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #333;
+            padding-top: 80px;
+        }
+        .hero-content {
+            max-width: 800px;
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #ff4757;
+        }
+        .features {
+            padding: 100px 0;
+            background-color: white;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #ff6b6b;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover {
+            transform: translateY(-10px);
         }
         .feature-icon {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
-        .chart-container {
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+        .ml-demo {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+        .ml-demo h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #ff6b6b;
+        }
+        .ml-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .ml-text {
+            flex: 1;
+            min-width: 300px;
+            margin-right: 30px;
+        }
+        .ml-chart {
+            flex: 1;
+            min-width: 300px;
+        }
+        #ingredientInput {
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #predictButton {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #predictButton:hover {
+            background-color: #ff4757;
+        }
+        #prediction {
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
         }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
 
-    <div class="content">
+    <header>
+        <nav class="container">
+            <div class="logo">AI Chef</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#ml-demo">ML Demo</a>
+                <a href="#" class="cta-button">Get Started</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
         <section class="hero">
-            <div class="container">
-                <h1 class="display-4 mb-4" data-aos="fade-up">AI Chef</h1>
-                <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">Your Intelligent Cooking Assistant</p>
-                <button class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="400">Get Started</button>
+            <div class="hero-content">
+                <h1>Cook Smarter with AI Chef</h1>
+                <p>Your intelligent cooking companion that brings AI-powered recipes and real-time guidance to your kitchen.</p>
+                <a href="#" class="cta-button">Start Cooking</a>
             </div>
         </section>
 
-        <section class="py-5 bg-light">
+        <section id="features" class="features">
             <div class="container">
-                <h2 class="text-center mb-5" data-aos="fade-up">Features</h2>
-                <div class="row">
-                    <div class="col-md-4 mb-4" data-aos="fade-up">
-                        <div class="text-center">
-                            <div class="feature-icon">🧠</div>
-                            <h3>AI-Powered Recipes</h3>
-                            <p>Get personalized recipe recommendations based on your preferences and available ingredients.</p>
-                        </div>
+                <h2>Intelligent Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🧠</div>
+                        <h3>AI-Powered Recipes</h3>
+                        <p>Get personalized recipe recommendations based on your preferences and available ingredients.</p>
                     </div>
-                    <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                        <div class="text-center">
-                            <div class="feature-icon">📷</div>
-                            <h3>Real-time Guidance</h3>
-                            <p>Receive step-by-step instructions with computer vision assistance for perfect results.</p>
-                        </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📷</div>
+                        <h3>Real-time Guidance</h3>
+                        <p>Receive step-by-step instructions with computer vision assistance for perfect results every time.</p>
                     </div>
-                    <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
-                        <div class="text-center">
-                            <div class="feature-icon">📊</div>
-                            <h3>Nutritional Analysis</h3>
-                            <p>Get detailed nutritional information for your meals using machine learning algorithms.</p>
-                        </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h3>Nutritional Analysis</h3>
+                        <p>Get detailed nutritional information for your meals using advanced machine learning algorithms.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-5">
+        <section id="ml-demo" class="ml-demo">
             <div class="container">
-                <h2 class="text-center mb-5" data-aos="fade-up">How It Works</h2>
-                <div class="row align-items-center">
-                    <div class="col-md-6" data-aos="fade-right">
-                        <h3>Machine Learning Model</h3>
-                        <p>Our advanced machine learning model analyzes thousands of recipes to provide you with the best cooking suggestions. Try our simple demo below:</p>
-                        <div class="mb-3">
-                            <label for="ingredientInput" class="form-label">Enter an ingredient:</label>
-                            <input type="text" class="form-control" id="ingredientInput" placeholder="e.g., chicken">
-                        </div>
-                        <button class="btn btn-primary" onclick="predictRecipe()">Predict Recipe</button>
-                        <p id="prediction" class="mt-3"></p>
+                <h2>Experience Our AI in Action</h2>
+                <div class="ml-content">
+                    <div class="ml-text">
+                        <h3>Recipe Complexity Predictor</h3>
+                        <p>Our AI model analyzes ingredients to estimate recipe complexity. Try it out!</p>
+                        <input type="text" id="ingredientInput" placeholder="Enter an ingredient (e.g., chicken, tomato)">
+                        <button id="predictButton">Predict Complexity</button>
+                        <p id="prediction"></p>
                     </div>
-                    <div class="col-md-6" data-aos="fade-left">
-                        <div class="chart-container">
-                            <canvas id="recipeChart"></canvas>
-                        </div>
+                    <div class="ml-chart">
+                        <canvas id="recipeChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
+    </main>
 
-        <section class="py-5 bg-light">
-            <div class="container">
-                <h2 class="text-center mb-5" data-aos="fade-up">Get Cooking with AI</h2>
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center">
-                        <p class="mb-4" data-aos="fade-up">Join thousands of happy cooks who have revolutionized their kitchen experience with AI Chef.</p>
-                        <button class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="200">Download Now</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+    <footer>
+        <p>&copy; 2023 AI Chef. All rights reserved.</p>
+    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Initialize AOS
-        AOS.init();
-
-        // Initialize particles.js
-        particlesJS.load('particles-js', 'assets/particles.json', function() {
-            console.log('callback - particles.js config loaded');
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle", stroke: { width: 0, color: "#000000" }, polygon: { nb_sides: 5 } },
+                opacity: { value: 0.5, random: false, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+                size: { value: 3, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
         });
 
         // TensorFlow.js simple model
         let model;
 
         async function loadModel() {
-            model = await tf.sequential();
-            model.add(tf.layers.dense({units: 1, inputShape: [1]}));
-            model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+            model = tf.sequential();
+            model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+            model.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
 
             const xs = tf.tensor2d([1, 2, 3, 4], [4, 1]);
             const ys = tf.tensor2d([1, 3, 5, 7], [4, 1]);
 
-            await model.fit(xs, ys, {epochs: 100});
+            await model.fit(xs, ys, { epochs: 100 });
             console.log('Model trained');
         }
 
         loadModel();
 
-        function predictRecipe() {
+        document.getElementById('predictButton').addEventListener('click', () => {
             const input = document.getElementById('ingredientInput').value;
             const prediction = model.predict(tf.tensor2d([input.length], [1, 1])).dataSync()[0];
-            document.getElementById('prediction').innerText = `Based on "${input}", we predict a recipe with approximately ${Math.round(prediction)} ingredients.`;
-        }
+            document.getElementById('prediction').innerText = `Predicted recipe complexity: ${Math.round(prediction * 10) / 10} / 10`;
+        });
 
         // Chart.js
         const ctx = document.getElementById('recipeChart').getContext('2d');
         new Chart(ctx, {
-            type: 'bar',
+            type: 'radar',
             data: {
-                labels: ['Breakfast', 'Lunch', 'Dinner', 'Dessert'],
+                labels: ['Prep Time', 'Cook Time', 'Ingredients', 'Steps', 'Skill Level'],
                 datasets: [{
-                    label: 'Average Cooking Time (minutes)',
-                    data: [15, 30, 45, 20],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
+                    label: 'Average Recipe Complexity',
+                    data: [7, 6, 8, 5, 7],
+                    backgroundColor: 'rgba(255, 107, 107, 0.2)',
+                    borderColor: 'rgba(255, 107, 107, 1)',
+                    pointBackgroundColor: 'rgba(255, 107, 107, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(255, 107, 107, 1)'
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+                elements: {
+                    line: {
+                        borderWidth: 3
                     }
                 },
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Average Cooking Time by Meal Type'
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        max: 10,
+                        min: 0,
+                        stepSize: 1
                     }
                 }
             }
